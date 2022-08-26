@@ -53,7 +53,7 @@ def create_trades(trade_count: int) -> List[TreeTrade]:
     return swaps
 
 
-def query_by_notional(min_notional: Optional[float]) -> me.queryset.QuerySet:
+def query_by_notional_helper(min_notional: Optional[float]) -> me.queryset.QuerySet:
     """
     Return TreeTrade objects with the notional field
     greater than or equal to the notional_amount parameter.
@@ -127,6 +127,15 @@ def query_trades(leg_ccy: Optional[str] = None):
 def example_raising_exception():
     raise HTTPException(status_code=418, detail="Exception raised in FastAPI.")
 
+
+@app.post('/query_by_notional')
+def query_by_notional(min_notional: Optional[float] = None):
+    """
+    Return trades with notional greater than or equal to min_notional.
+    If min_notional is not specified return all trades.
+    """
+    trades = query_by_notional_helper(min_notional)
+    return {"trades": [trade.to_json() for trade in trades]}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="localhost", port=50301)
