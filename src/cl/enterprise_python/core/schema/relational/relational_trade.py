@@ -26,4 +26,5 @@ class RelationalTrade(RelationalTradeKey):
     """
 
     trade_type: str = sa.Column(sa.String)
+    notional: float = sa.Column(sa.Float)
     """Trade type."""
