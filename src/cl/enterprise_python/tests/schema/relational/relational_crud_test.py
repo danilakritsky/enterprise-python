@@ -191,22 +191,22 @@ class RelCrudTest:
                 )
 
                 trades_with_notional_200_or_greater = list(
-                    session
-                        .query(RelationalTrade)
-                        .where(RelationalTrade.notional >= 200)
-                        .order_by(RelationalTrade.trade_id)
+                    session.query(RelationalTrade)
+                    .where(RelationalTrade.notional >= 200)
+                    .order_by(RelationalTrade.trade_id)
                 )
 
                 trade_template = " " * 4 + "trade_id={} trade_type={} notional={}\n"
                 result += (
-                    "Trades with notional greater than or equal to 200:\n" +
-                    "".join([
-                        trade_template.format(
-                            trade.trade_id,
-                            trade.trade_type,
-                            trade.notional)
-                        for trade in trades_with_notional_200_or_greater
-                    ])
+                    "Trades with notional greater than or equal to 200:\n"
+                    + "".join(
+                        [
+                            trade_template.format(
+                                trade.trade_id, trade.trade_type, trade.notional
+                            )
+                            for trade in trades_with_notional_200_or_greater
+                        ]
+                    )
                 )
 
         # Verify result

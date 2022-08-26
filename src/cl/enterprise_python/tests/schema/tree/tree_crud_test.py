@@ -68,7 +68,7 @@ class TreeCrudTest:
                     TreeLeg(leg_type="Fixed", leg_ccy=ccy_list[i % ccy_count]),
                     TreeLeg(leg_type="Floating", leg_ccy="EUR"),
                 ],
-                notional=100 * (i + 1)
+                notional=100 * (i + 1),
             )
             for i in range(0, 2)
         ]
@@ -77,7 +77,7 @@ class TreeCrudTest:
                 trade_id=f"T{i+1}",
                 trade_type="Bond",
                 bond_ccy=ccy_list[i % ccy_count],
-                notional=100 * (i + 1)
+                notional=100 * (i + 1),
             )
             for i in range(2, 3)
         ]
@@ -154,22 +154,16 @@ class TreeCrudTest:
             ]
         )
 
-        trades_with_notional_200_or_greater = (
-            TreeTrade
-                .objects(notional__gte=200)
-                .order_by("trade_id")
-        )
+        trades_with_notional_200_or_greater = TreeTrade.objects(
+            notional__gte=200
+        ).order_by("trade_id")
 
         trade_template = " " * 4 + "trade_id={} trade_type={} notional={}\n"
-        result += (
-            "Trades with notional greater than or equal to 200:\n" +
-            "".join([
-                trade_template.format(
-                    trade.trade_id,
-                    trade.trade_type,
-                    trade.notional)
+        result += "Trades with notional greater than or equal to 200:\n" + "".join(
+            [
+                trade_template.format(trade.trade_id, trade.trade_type, trade.notional)
                 for trade in trades_with_notional_200_or_greater
-            ])
+            ]
         )
         # Further study - for MongoDB and certain other databases, wildcard queries
         # can be used to simultaneously query for GBP currency in both legs when this

@@ -128,7 +128,7 @@ def example_raising_exception():
     raise HTTPException(status_code=418, detail="Exception raised in FastAPI.")
 
 
-@app.post('/query_by_notional')
+@app.post("/query_by_notional")
 def query_by_notional(min_notional: Optional[float] = None):
     """
     Return trades with notional greater than or equal to min_notional.
@@ -136,6 +136,7 @@ def query_by_notional(min_notional: Optional[float] = None):
     """
     trades = query_by_notional_helper(min_notional)
     return {"trades": [trade.to_json() for trade in trades]}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="localhost", port=50301)
