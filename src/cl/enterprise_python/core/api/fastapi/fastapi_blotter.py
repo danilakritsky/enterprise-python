@@ -46,10 +46,22 @@ def create_trades(trade_count: int) -> List[TreeTrade]:
                 TreeLeg(leg_type="Fixed", leg_ccy=ccy_list[i % ccy_count]),
                 TreeLeg(leg_type="Floating", leg_ccy=ccy_list[(2 * i) % ccy_count]),
             ],
+            notional=100 * (i + 1),
         )
         for i in range(trade_count)
     ]
     return swaps
+
+
+def query_by_notional(min_notional: Optional[float]) -> me.queryset.QuerySet:
+    """
+    Return TreeTrade objects with the notional field
+    greater than or equal to the notional_amount parameter.
+    Return all objects if notional_amount is not specified.
+    """
+    if min_notional:
+        return TreeTrade.objects(notional__gte=min_notional).order_by("trade_id")
+    return TreeTrade.objects().order_by("trade_id")
 
 
 @app.get("/")
