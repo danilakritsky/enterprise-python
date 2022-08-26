@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import json
 
 import requests
 
@@ -32,3 +33,32 @@ if __name__ == "__main__":
     api_url = "http://localhost:50301/get_trade"  # Port used by fastapi_blotter.py
     t3_trade = requests.post(api_url, params={"trade_id": "T003"})
     print(f"Trade with trade_id=T3: {t3_trade.json()}")
+
+    # Get trades whose notional values are greater than or equal to the notional var
+    api_url = (
+        "http://localhost:50301/query_by_notional"  # Port used by fastapi_blotter.py
+    )
+    notional = 200
+    trades_with_matching_notional = requests.post(
+        api_url, params={"min_notional": notional}
+    )
+    print(f"Trades with notional >= {notional}: {trades_with_matching_notional.json()}")
+
+    trades_with_matching_notional_dict = trades_with_matching_notional.json()
+    trades_with_matching_notional_dict["trades"] = [
+        json.loads(trade) for trade in trades_with_matching_notional_dict["trades"]
+    ]
+    assert all(
+        trade["notional"] >= notional
+        for trade in trades_with_matching_notional_dict["trades"]
+    )
+
+    # Get trades without specifying min_notional parameter
+    api_url = (
+        "http://localhost:50301/query_by_notional"  # Port used by fastapi_blotter.py
+    )
+    trades_with_notional_ignored = requests.post(api_url)
+    print(
+        f"No notional specified - returning all trades: {trades_with_notional_ignored.json()}"
+    )
+    assert trades_with_notional_ignored.json() == trades.json()

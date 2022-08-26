@@ -84,6 +84,7 @@ class RelCrudTest:
                 trade_id=f"T{i + 1}",
                 trade_type="Swap",
                 legs=[fixed_legs[i], floating_legs[i]],
+                notional=100 * (i + 1),
             )
             for i in range(0, 2)
         ]
@@ -94,6 +95,7 @@ class RelCrudTest:
                 trade_id=f"T{i + 1}",
                 trade_type="Bond",
                 bond_ccy=ccy_list[i % ccy_count],
+                notional=100 * (i + 1),
             )
             for i in range(2, 3)
         ]
@@ -186,6 +188,25 @@ class RelCrudTest:
                         f"leg_type[1]={trade.legs[1].leg_type} leg_ccy[1]={trade.legs[1].leg_ccy}\n"
                         for trade in gbp_fixed_swaps
                     ]
+                )
+
+                trades_with_notional_200_or_greater = list(
+                    session.query(RelationalTrade)
+                    .where(RelationalTrade.notional >= 200)
+                    .order_by(RelationalTrade.trade_id)
+                )
+
+                trade_template = " " * 4 + "trade_id={} trade_type={} notional={}\n"
+                result += (
+                    "Trades with notional greater than or equal to 200:\n"
+                    + "".join(
+                        [
+                            trade_template.format(
+                                trade.trade_id, trade.trade_type, trade.notional
+                            )
+                            for trade in trades_with_notional_200_or_greater
+                        ]
+                    )
                 )
 
         # Verify result
