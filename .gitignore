@@ -9,6 +9,8 @@ syntax: glob
 *.pyd
 *.db
 **/.vscode
+**/.devcontainer
+**/.venv
 
 # Using regexp syntax
 syntax: regexp

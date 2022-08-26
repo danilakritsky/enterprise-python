@@ -7,3 +7,6 @@ All Swaps:
     trade_id=T2 trade_type=Swap
 Swaps where fixed leg has GBP currency:
     trade_id=T2 trade_type=Swap leg_type[0]=Fixed leg_ccy[0]=GBP leg_type[1]=Floating leg_ccy[1]=EUR
+Trades with notional greater than or equal to 200:
+    trade_id=T2 trade_type=Swap notional=200.0
+    trade_id=T3 trade_type=Bond notional=300.0
